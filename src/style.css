@@ -193,3 +193,20 @@
 @media(max-width:760px){.app-shell.is-startup-loading>*:not(.mobile-startup-splash){visibility:hidden!important}.mobile-startup-splash{z-index:2147483647;background-color:#09080d;background-image:radial-gradient(ellipse at 50% 42%,#241532 0%,#100d17 48%,#09080d 100%);opacity:1!important;pointer-events:auto;animation:none!important}}
 
 @media(max-width:760px){.mobile-startup-splash img{aspect-ratio:1;border-radius:50%;object-fit:cover;clip-path:circle(49% at 50% 50%);mask-image:radial-gradient(circle at center,#000 62%,transparent 74%);-webkit-mask-image:radial-gradient(circle at center,#000 62%,transparent 74%);mix-blend-mode:screen;filter:drop-shadow(0 0 18px #bb51ff66)}}
+
+.online-pill.offline{color:#eca0a9;cursor:help}.online-pill.offline i{background:#ff788b;box-shadow:0 0 10px #ff5367}
+
+
+.hero-eyebrow-row{width:100%}.hero-online-count{display:none}
+@media(max-width:760px){.hero-eyebrow-row{display:flex;align-items:center;justify-content:space-between;gap:6px;max-width:100%}.hero-eyebrow-row>.eyebrow{font-size:7px;letter-spacing:1.35px;white-space:nowrap}.hero-online-count{display:inline-flex;align-items:center;gap:5px;flex:0 0 auto;color:#c7c0d1;font-size:7px;letter-spacing:.35px;white-space:nowrap}.hero-online-count i{width:5px;height:5px;border-radius:50%;background:#83e69a;box-shadow:0 0 8px #54e77a}.hero-online-count.unavailable i{background:#ff7587;box-shadow:0 0 8px #ff536b}}
+
+.online-pill{gap:8px;padding:7px 10px;border:1px solid #72dc8e24;border-radius:999px;background:#72dc8e0a;color:#d4d0da;font-size:10px;letter-spacing:.3px;font-weight:600}.online-pill i{width:7px;height:7px;flex:0 0 7px}.online-pill.offline{border-color:#ff788b30;background:#ff788b0c}
+.hero-online-count{font-size:9px!important;font-weight:700;letter-spacing:.25px!important;text-transform:uppercase;background:#72dc8e10;border:1px solid #72dc8e30;border-radius:999px;padding:5px 8px;color:#e5e1e9}.hero-online-count i{width:6px!important;height:6px!important;flex:0 0 6px;box-shadow:0 0 9px #54e77a}.hero-online-count.unavailable{border-color:#ff788b40;background:#ff788b12;color:#ffc3cb}
+@media(max-width:1100px){.online-pill{display:none!important}}
+
+
+/* Installable PWA controls and setup guidance. */
+.install-app-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:8px 11px;border:1px solid #514168;border-radius:18px;background:#b99aff16;color:#d7c2ff;font-size:10px;font-weight:650;white-space:nowrap;transition:background .18s,border-color .18s}.install-app-button:hover{background:#b99aff2b;border-color:#9f80d0}.install-help-card{max-width:430px}.install-steps{display:grid;gap:10px;margin:20px 0;text-align:left}.install-steps>div{display:grid;gap:5px;padding:12px 14px;border:1px solid #342b40;border-radius:11px;background:#0d0b13aa}.install-steps b{color:#d3b8ff;font-size:11px}.install-steps span{color:#b1a8ba;font-size:10px;line-height:1.6}.install-help-card .auth-secondary{margin-top:2px}
+@media(max-width:760px){.install-app-button{width:31px;height:31px;flex:0 0 31px;padding:0;border-radius:50%}.install-app-button span{display:none}.install-app-button svg{width:15px;height:15px}.top-actions{gap:7px}.room-open{padding:7px;border-radius:50%;width:31px;height:31px;justify-content:center}.room-open span{display:none}}
+
+.brand-mark img{display:block;width:100%;height:100%;object-fit:cover;object-position:left center;border-radius:10px}

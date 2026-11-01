@@ -24,12 +24,10 @@
       }
     },
     "presence": {
-      ".read": true,
       "connections": {
+        ".read": true,
         "$uid": {
-          "$connectionId": {
-            ".write": "auth != null && auth.uid === $uid"
-          }
+          ".write": "auth != null && auth.uid === $uid"
         }
       }
     }
