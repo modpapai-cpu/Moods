@@ -14,7 +14,7 @@
     },
     "rooms": {
       "$roomId": {
-        ".read": "auth != null && data.child('members').child(auth.uid).val() === true",
+        ".read": "auth != null",
         ".write": "auth != null && ((!data.exists() && newData.child('createdBy').val() === auth.uid) || data.child('members').child(auth.uid).val() === true)",
         "members": {
           "$uid": {
