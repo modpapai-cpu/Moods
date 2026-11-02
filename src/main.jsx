@@ -173,7 +173,7 @@ function App(){
    return()=>{a.pause();a.removeEventListener('timeupdate',time);a.removeEventListener('loadedmetadata',meta);a.removeEventListener('ended',ended);a.removeEventListener('pause',handlePause);a.removeEventListener('play',handlePlay)}
   },[]);
   useEffect(()=>{
-   const resumeBackgroundAudio=()=>{if(document.hidden&&playing&&current?.url&&audio.current?.paused)audio.current.play().catch(()=>{})};
+   const resumeBackgroundAudio=()=>{if(!document.hidden||!playing)return;if(current?.youtubeVideoId){if(youtubePlayer.current){youtubePlayer.current.__moodsDesiredPlaying=true;youtubePlayer.current.playVideo?.()}return}if(current?.url&&audio.current?.paused)audio.current.play().catch(()=>{})};
    document.addEventListener('visibilitychange',resumeBackgroundAudio);window.addEventListener('pagehide',resumeBackgroundAudio);
    return()=>{document.removeEventListener('visibilitychange',resumeBackgroundAudio);window.removeEventListener('pagehide',resumeBackgroundAudio)}
   },[playing,current?.url]);
