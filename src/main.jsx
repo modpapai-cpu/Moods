@@ -165,15 +165,22 @@ function App(){
    return()=>screen.orientation?.removeEventListener('change',handleOrientationChange);
   },[]);
   useEffect(()=>{
-   audio.current=new Audio();audio.current.preload='auto';audio.current.playsInline=true;audio.current.volume=volume;
+   audio.current=new Audio();audio.current.preload='auto';audio.current.playsInline=true;audio.current.setAttribute('x-webkit-airplay','allow');audio.current.volume=volume;
    const a=audio.current; const time=()=>setProgress(a.currentTime||0);const meta=()=>setDuration(a.duration||0);const ended=()=>nextSongRef.current();
-   a.addEventListener('timeupdate',time);a.addEventListener('loadedmetadata',meta);a.addEventListener('ended',ended);
-   return()=>{a.pause();a.removeEventListener('timeupdate',time);a.removeEventListener('loadedmetadata',meta);a.removeEventListener('ended',ended)}
+   const handlePause=()=>{if(!document.hidden)setPlaying(false)};
+   const handlePlay=()=>setPlaying(true);
+   a.addEventListener('timeupdate',time);a.addEventListener('loadedmetadata',meta);a.addEventListener('ended',ended);a.addEventListener('pause',handlePause);a.addEventListener('play',handlePlay);
+   return()=>{a.pause();a.removeEventListener('timeupdate',time);a.removeEventListener('loadedmetadata',meta);a.removeEventListener('ended',ended);a.removeEventListener('pause',handlePause);a.removeEventListener('play',handlePlay)}
   },[]);
+  useEffect(()=>{
+   const resumeBackgroundAudio=()=>{if(document.hidden&&playing&&current?.url&&audio.current?.paused)audio.current.play().catch(()=>{})};
+   document.addEventListener('visibilitychange',resumeBackgroundAudio);window.addEventListener('pagehide',resumeBackgroundAudio);
+   return()=>{document.removeEventListener('visibilitychange',resumeBackgroundAudio);window.removeEventListener('pagehide',resumeBackgroundAudio)}
+  },[playing,current?.url]);
   useEffect(()=>{
    if(!('mediaSession' in navigator))return;
    navigator.mediaSession.metadata=current?new MediaMetadata({title:current.title||'MOODS',artist:current.artist||'MOODS Radio',album:current.playlistName||'MOODS',artwork:current.thumbnail?[{src:current.thumbnail}]:[{src:'/pwa-icon-192.png'}]}):null;
-   const actions={play:()=>toggle(),pause:()=>toggle(),previoustrack:()=>prevSong(),nexttrack:()=>nextSong(),seekbackward:()=>seekTo(Math.max(0,(current?.youtubeVideoId?youtubePlayer.current?.getCurrentTime?.():audio.current?.currentTime)||0)-10),seekforward:()=>seekTo(Math.min(duration,(current?.youtubeVideoId?youtubePlayer.current?.getCurrentTime?.():audio.current?.currentTime)||0)+10)};
+   const actions={play:()=>{if(!playing)toggle()},pause:()=>{if(playing)toggle()},previoustrack:()=>prevSong(),nexttrack:()=>nextSong(),seekbackward:()=>seekTo(Math.max(0,(current?.youtubeVideoId?youtubePlayer.current?.getCurrentTime?.():audio.current?.currentTime)||0)-10),seekforward:()=>seekTo(Math.min(duration,(current?.youtubeVideoId?youtubePlayer.current?.getCurrentTime?.():audio.current?.currentTime)||0)+10)};
    Object.entries(actions).forEach(([action,handler])=>{try{navigator.mediaSession.setActionHandler(action,handler)}catch{}});
    navigator.mediaSession.playbackState=playing?'playing':'paused';
    return()=>Object.keys(actions).forEach(action=>{try{navigator.mediaSession.setActionHandler(action,null)}catch{}});
