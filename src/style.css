@@ -210,3 +210,5 @@
 @media(max-width:760px){.install-app-button{width:31px;height:31px;flex:0 0 31px;padding:0;border-radius:50%}.install-app-button span{display:none}.install-app-button svg{width:15px;height:15px}.top-actions{gap:7px}.room-open{padding:7px;border-radius:50%;width:31px;height:31px;justify-content:center}.room-open span{display:none}}
 
 .brand-mark img{display:block;width:100%;height:100%;object-fit:cover;object-position:left center;border-radius:10px}
+.admin-cover-art{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}.admin-cover-art label{min-width:0}.admin-cover-art input[type=file]{padding:10px 8px}.admin-cover-art small{display:block;color:var(--muted,#8f8aa2);font-size:11px;margin-top:5px}.admin-cover-preview{width:56px;height:56px;object-fit:cover;border-radius:10px;grid-column:2;margin-top:-4px}.playlist-cover-image{display:block;object-fit:cover}@media(max-width:620px){.admin-cover-art{grid-template-columns:1fr}.admin-cover-preview{grid-column:1}}
+
