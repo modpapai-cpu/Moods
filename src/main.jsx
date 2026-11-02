@@ -156,8 +156,28 @@ function App(){
   script.addEventListener('load',renderGoogleButton);
   return()=>script.removeEventListener('load',renderGoogleButton);
  },[loginOpen,account]);
- useEffect(()=>{audio.current=new Audio();audio.current.volume=volume; const a=audio.current; const time=()=>setProgress(a.currentTime||0);const meta=()=>setDuration(a.duration||0);const ended=()=>nextSongRef.current();a.addEventListener('timeupdate',time);a.addEventListener('loadedmetadata',meta);a.addEventListener('ended',ended);return()=>{a.pause();a.removeEventListener('timeupdate',time);a.removeEventListener('loadedmetadata',meta);a.removeEventListener('ended',ended)}},[]);
- useEffect(()=>{if(!audio.current)return; audio.current.volume=volume},[volume]);
+  useEffect(()=>{
+   const orientation=screen.orientation;
+   if(orientation?.lock){orientation.lock('portrait').catch(()=>{})}
+   const handleOrientationChange=()=>{if(screen.orientation?.type?.startsWith('landscape')&&screen.orientation.lock)screen.orientation.lock('portrait').catch(()=>{})};
+   screen.orientation?.addEventListener('change',handleOrientationChange);
+   return()=>screen.orientation?.removeEventListener('change',handleOrientationChange);
+  },[]);
+  useEffect(()=>{
+   audio.current=new Audio();audio.current.preload='auto';audio.current.playsInline=true;audio.current.volume=volume;
+   const a=audio.current; const time=()=>setProgress(a.currentTime||0);const meta=()=>setDuration(a.duration||0);const ended=()=>nextSongRef.current();
+   a.addEventListener('timeupdate',time);a.addEventListener('loadedmetadata',meta);a.addEventListener('ended',ended);
+   return()=>{a.pause();a.removeEventListener('timeupdate',time);a.removeEventListener('loadedmetadata',meta);a.removeEventListener('ended',ended)}
+  },[]);
+  useEffect(()=>{
+   if(!('mediaSession' in navigator))return;
+   navigator.mediaSession.metadata=current?new MediaMetadata({title:current.title||'MOODS',artist:current.artist||'MOODS Radio',album:current.playlistName||'MOODS',artwork:current.thumbnail?[{src:current.thumbnail}]:[{src:'/pwa-icon-192.png'}]}):null;
+   const actions={play:()=>toggle(),pause:()=>toggle(),previoustrack:()=>prevSong(),nexttrack:()=>nextSong(),seekbackward:()=>seekTo(Math.max(0,(current?.youtubeVideoId?youtubePlayer.current?.getCurrentTime?.():audio.current?.currentTime)||0)-10),seekforward:()=>seekTo(Math.min(duration,(current?.youtubeVideoId?youtubePlayer.current?.getCurrentTime?.():audio.current?.currentTime)||0)+10)};
+   Object.entries(actions).forEach(([action,handler])=>{try{navigator.mediaSession.setActionHandler(action,handler)}catch{}});
+   navigator.mediaSession.playbackState=playing?'playing':'paused';
+   return()=>Object.keys(actions).forEach(action=>{try{navigator.mediaSession.setActionHandler(action,null)}catch{}});
+  },[current?.title,current?.artist,current?.playlistName,current?.thumbnail,playing,duration]);
+  useEffect(()=>{if(!audio.current)return; audio.current.volume=volume},[volume]);
  useEffect(()=>{if(!current||!playing)return;const timer=setInterval(()=>{const position=current.youtubeVideoId?(youtubePlayer.current?.getCurrentTime?.()||0):(audio.current?.currentTime||0);saveLastPlayback(current,position,true)},5000);return()=>clearInterval(timer)},[account?.uid,current?.title,current?.youtubeVideoId,current?.url,playing]);
 
   const publishRoomPlayer=(song=current,isPlaying=playing,position=(song?.youtubeVideoId?youtubePlayer.current?.getCurrentTime?.():audio.current?.currentTime)||0,extra={})=>{if(!database||!roomId||!account)return;update(ref(database,`rooms/${roomId}/player`),{songPlaylistId:song?.playlistId||activePlaylist.id,songIndex:song?.index??0,youtubeVideoId:song?.youtubeVideoId||'',isPlaying,position,shuffle,repeat,volume,updatedBy:account.uid,...extra,updatedAt:serverTimestamp()}).catch(error=>setRoomError(error.message))};

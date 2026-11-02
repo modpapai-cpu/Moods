@@ -4,7 +4,7 @@
   "dir": "ltr",
   "display": "standalone",
   "name": "Moods",
-  "orientation": "any",
+  "orientation": "portrait",
   "scope": "/",
   "short_name": "Moods",
   "start_url": "/",
